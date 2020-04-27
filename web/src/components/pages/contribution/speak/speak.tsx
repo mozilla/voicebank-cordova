@@ -7,7 +7,7 @@ import * as React from 'react';
 import BalanceText from 'react-balance-text';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
-const NavigationPrompt = require('react-router-navigation-prompt').default;
+import NavigationPrompt from 'react-router-navigation-prompt';
 import { Locale } from '../../../../stores/locale';
 import { Notifications } from '../../../../stores/notifications';
 import { Sentences } from '../../../../stores/sentences';
@@ -21,6 +21,9 @@ import URLS from '../../../../urls';
 import { localeConnector, LocalePropsFromState } from '../../../locale-helpers';
 import Modal, { ModalButtons } from '../../../modal/modal';
 import TermsModal from '../../../terms-modal';
+import { CheckIcon, FontIcon, MicIcon, StopIcon } from '../../../ui/icons';
+import { Button, TextButton } from '../../../ui/ui';
+import { isFirefoxFocus, isNativeIOS } from '../../../../utility';
 import {
   CheckIcon,
   MicIcon,
@@ -145,6 +148,7 @@ interface Props
 
 interface State {
   clips: SentenceRecording[];
+  clipUploaded: boolean;
   isSubmitted: boolean;
   error?: RecordingError | AudioError;
   recordingStatus: RecordingStatus;
@@ -155,6 +159,7 @@ interface State {
 
 const initialState: State = {
   clips: [],
+  clipUploaded: false,
   isSubmitted: false,
   error: null,
   recordingStatus: null,
@@ -512,6 +517,7 @@ class SpeakPage extends React.Component<Props, State> {
     this.setState({ showPrivacyModal: false });
     this.props.updateUser({ privacyAgreed: true });
     this.upload(true);
+    this.setState({ clipUploaded: true });
   };
 
   private toggleDiscardModal = () => {
@@ -557,11 +563,13 @@ class SpeakPage extends React.Component<Props, State> {
       rerecordIndex,
       showPrivacyModal,
       showDiscardModal,
+      clipUploaded,
     } = this.state;
     const recordingIndex = this.getRecordingIndex();
 
     return (
       <React.Fragment>
+        {!clipUploaded && (
         <NavigationPrompt
           when={clips.filter(clip => clip.recording).length > 0}>
           {({ onConfirm, onCancel }: any) => (
@@ -578,8 +586,8 @@ class SpeakPage extends React.Component<Props, State> {
                     outline
                     rounded
                     className={getTrackClass('fs', 'exit-submit-clips')}
-                    onClick={() => {
-                      if (this.upload()) onConfirm();
+                    onClick={ () => {
+                      this.upload();
                     }}
                   />
                 </Localized>
@@ -600,7 +608,7 @@ class SpeakPage extends React.Component<Props, State> {
               </Localized>
             </Modal>
           )}
-        </NavigationPrompt>
+        </NavigationPrompt>)}
         {showPrivacyModal && (
           <TermsModal
             onAgree={this.agreeToTerms}
