@@ -119,7 +119,7 @@ button {
 }
 
 .js-focus-visible .focus-visible {
-    outline: 1px solid black;
+    outline: 1px solid var(--black);
 }
 
 /* Icon font element. */
@@ -361,7 +361,7 @@ body:not(.focus) #scroller {
 }
 
 .opt-in input:checked {
-    background: black;
+    background: var(--black);
 }
 
 .small {
@@ -434,7 +434,7 @@ a.small,
     right: 0;
     height: 5px;
     z-index: 3;
-    background: linear-gradient(270deg, #e5868b, #a2a4d1);
+    background: linear-gradient(270deg, var(--pink-1), var(--purple-1));
     background-size: 400% 400%;
     animation: move-background 2s ease infinite;
     transition: width var(--transition-duration-slow) var(--easing),
@@ -465,8 +465,8 @@ a.small,
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: white;
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    background: var(--white);
+    box-shadow: 0 5px 10px 0 var(--black-9);
     z-index: var(--override-z-index);
     animation: fade-in var(--transition-duration) linear;
 
@@ -504,14 +504,102 @@ a.small,
         letter-spacing: 0.8px;
         text-transform: uppercase;
         text-align: center;
-        background-color: #629ff4;
-        color: white;
+        background-color: var(--blue);
+        color: var(--white);
         box-shadow: none;
         transition: box-shadow linear var(--transition-duration);
 
         &:hover {
             opacity: 1;
-            box-shadow: 0 5px 10px rgba(98, 159, 244, 0.8);
+            box-shadow: 0 5px 10px var(--blue-3);
         }
+    }
+}
+
+body {
+    background-color: var(--white);
+    color: var(--black);
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .dark-mode-toggle > button {
+    color: var(--warm-grey);
+    &:last-child {
+        color: lightblue;
+    }
+}
+
+body.dark-mode .content code {
+    background-color: var(--black);
+}
+
+body.dark-mode .content a {
+    color: var(--lime-1);
+}
+
+body.dark-mode .content button {
+    color: var(--lime-1);
+}
+
+.dark-mode-toggle {
+    display: flex;
+    margin: 0 auto;
+    & > button {
+        font-size: 1.2em;
+        background: none;
+        border: none;
+        color: var(--yellow-1);
+        cursor: pointer;
+        transition: color 0.3s ease;
+        &:last-child {
+            color: var(--gray-5);
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.toggle-control {
+    position: relative;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+}
+
+input[type='checkbox'].dmcheck {
+    width: 40px;
+    height: 10px;
+    background: var(--gray-5);
+    position: relative;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    vertical-align: 2px;
+    outline: none;
+
+    &:checked + label {
+        left: 30px;
+    }
+
+    &:focus-visible {
+        outline: solid 2px var(--white);
+    }
+
+    & + label {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: absolute;
+        left: 2px;
+        background: var(--white);
+        opacity: 0.9;
+        background-color: var(--white);
     }
 }

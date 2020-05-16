@@ -1,5 +1,5 @@
 .alert {
-    color: #fff;
+    color: var(--white);
     padding: 8px;
     font-size: var(--font-size-xs);
 
