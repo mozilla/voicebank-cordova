@@ -1,3 +1,4 @@
+const s3Zip = require('s3-zip')
 import { S3 } from 'aws-sdk';
 import { getConfig } from '../config-helper';
 import Model from './model';
@@ -83,6 +84,20 @@ export default class Bucket {
     }
 
     return Promise.all(clipPromises);
+  }
+
+  async getRecordedClips(client_id: string) {
+    const bucket = getConfig().BUCKET_NAME;
+    const folder = `${client_id}/`;
+    const params = { Bucket: bucket, Prefix: folder };
+
+    const allFiles = await this.s3.listObjectsV2(params).promise();
+    const recordings = allFiles.Contents
+      .filter(item => item.Key.endsWith('mp3'))
+      .map(item => item.Key.substr(folder.length));
+
+    return s3Zip
+      .archive({ s3: this.s3, bucket: bucket }, folder, recordings);
   }
 
   getAvatarClipsUrl(path: string) {
